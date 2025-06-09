@@ -1,18 +1,86 @@
 [
     {
-        "front": "Hello",
-        "back": "A greeting or expression of goodwill."
+        "front": "Baihui",
+        "back": "Huyệt Bách Hội, nằm trên đỉnh đầu, giữa hai tai."
     },
     {
-        "front": "Apple",
-        "back": "A fruit that is typically round and red, green, or yellow."
+        "front": "Hegu",
+        "back": "Huyệt Hợp Cốc, nằm ở mu bàn tay, giữa xương ngón tay cái và trỏ."
     },
     {
-        "front": "Car",
-        "back": "A road vehicle, typically with four wheels, powered by an internal combustion engine."
+        "front": "Shenmen",
+        "back": "Huyệt Thần Môn, nằm ở tai, sau vành tai, một điểm gần cơ tai."
     },
     {
-        "front": "Book",
-        "back": "A set of written or printed pages, typically bound with a cover."
+        "front": "Zusanli",
+        "back": "Huyệt Túc Lâm Khấp, nằm ở dưới xương bánh chè khoảng 3 thốn."
+    },
+    {
+        "front": "Fengchi",
+        "back": "Huyệt Phong Chỉ, nằm ở chỗ giao giữa gáy và xương cổ."
+    },
+    {
+        "front": "Neiguan",
+        "back": "Huyệt Nội Quan, nằm ở cẳng tay, khoảng 2 thốn phía trên cổ tay."
+    },
+    {
+        "front": "Yintang",
+        "back": "Huyệt Ấn Đường, nằm giữa hai lông mày, trên trán."
+    },
+    {
+        "front": "Tianzhu",
+        "back": "Huyệt Thiên Trụ, nằm ở cổ, gần chỗ giao giữa đầu và cổ."
+    },
+    {
+        "front": "Guanyuan",
+        "back": "Huyệt Quan Nguyên, nằm ở dưới rốn, khoảng 3 thốn."
+    },
+    {
+        "front": "Sanyinjiao",
+        "back": "Huyệt Tam Âm Giao, nằm ở mặt trong cẳng chân, cách đầu gối khoảng 3 thốn."
+    },
+    {
+        "front": "Dazhui",
+        "back": "Huyệt Đại Chủy, nằm ở giữa sống lưng, dưới đốt sống cổ."
+    },
+    {
+        "front": "Xuehai",
+        "back": "Huyệt Tuyến Hải, nằm ở mặt trong đùi, cách đầu gối khoảng 3 thốn."
+    },
+    {
+        "front": "Jianjing",
+        "back": "Huyệt Kiên Tỉnh, nằm ở bả vai, giữa vai và cổ."
+    },
+    {
+        "front": "Huantiao",
+        "back": "Huyệt Hoàn Tiêu, nằm ở mông, trong khớp háng."
+    },
+    {
+        "front": "Yanglingquan",
+        "back": "Huyệt Dương Lăng Tuyền, nằm ở phía ngoài của đầu gối."
+    },
+    {
+        "front": "Shixuan",
+        "back": "Huyệt Thập Xuân, nằm ở đầu ngón tay, 10 huyệt ở đầu các ngón tay."
+    },
+    {
+        "front": "Zhongwan",
+        "back": "Huyệt Trung Quán, nằm ở vùng bụng, trên rốn khoảng 4 thốn."
+    },
+    {
+        "front": "Lianquan",
+        "back": "Huyệt Liên Quan, nằm trên vùng cổ, ngay dưới cằm."
+    },
+    {
+        "front": "Hegu",
+        "back": "Huyệt Hợp Cốc, một trong những huyệt nổi tiếng trong việc giảm đau."
+    },
+    {
+        "front": "Xiyan",
+        "back": "Huyệt Tất Yan, nằm ở dưới đầu gối, chỗ lồi của khớp gối."
+    },
+    {
+        "front": "Quchi",
+        "back": "Huyệt Quý Chí, nằm ở khuỷu tay, ở bên ngoài tay."
     }
 ]
