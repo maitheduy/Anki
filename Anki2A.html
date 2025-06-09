@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flash Card - Học Huyệt Đạo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f5f5f5; 
+      color: #333;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .flashcard {
+      background-color: #fff;
+      width: 900px;
+      height: 600px;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .flashcard p {
+      font-size: 40px;
+      margin: 0;
+      text-align: center;
+    }
+
+    .word {
+      color: #007BFF;
+    }
+
+    .definition {
+      display: none;
+      font-size: 28px;
+      color: #FF5733;
+      margin-top: 20px;
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .score {
+      font-size: 24px;
+      color: #333;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="flashcard" id="flashcard">
+      <p id="word" class="word">Đang tải...</p>
+      <p id="definition" class="definition"></p>
+    </div>
+    <div class="buttons">
+      <button id="nextBtn">Tiếp theo</button>
+      <button id="flipBtn">Lật thẻ</button>
+    </div>
+    <div class="score" id="score">Điểm: 100</div>
+  </div>
+
+  <script>
+    let flashcards = [];
+    let currentIndex = 0;
+    let score = 100;
+    let voicesLoaded = false;
+
+    const wordElement = document.getElementById('word');
+    const definitionElement = document.getElementById('definition');
+    const nextBtn = document.getElementById('nextBtn');
+    const flipBtn = document.getElementById('flipBtn');
+    const scoreElement = document.getElementById('score');
+
+    function showLoading() {
+      wordElement.textContent = "Đang tải...";
+      definitionElement.style.display = 'none';
+    }
+
+    showLoading();
+
+    fetch('vocab.json')
+      .then(response => {
+        if (!response.ok) throw new Error("Không thể tải file vocab.json");
+        return response.json();
+      })
+      .then(data => {
+        flashcards = data;
+        console.log("Dữ liệu đã tải xong:", flashcards);
+
+        if (voicesLoaded) {
+          showCard(currentIndex);
+        } else {
+          window.speechSynthesis.onvoiceschanged = () => {
+            voicesLoaded = true;
+            showCard(currentIndex);
+          };
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        wordElement.textContent = "Lỗi tải dữ liệu";
+        definitionElement.style.display = 'none';
+      });
+
+    function speak(text, lang = 'en-US') {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+
+      const voice = speechSynthesis.getVoices().find(v => v.lang === lang);
+      if (voice) {
+        utterance.voice = voice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function showCard(index) {
+      const card = flashcards[index];
+      wordElement.textContent = card.front;
+      definitionElement.textContent = card.back;
+      definitionElement.style.display = 'none';
+
+      speak(card.front, 'en-US');
+    }
+
+    function flipCard() {
+      if (definitionElement.style.display === 'none') {
+        definitionElement.style.display = 'block';
+        const card = flashcards[currentIndex];
+        speak(card.back, 'vi-VN');
+      } else {
+        definitionElement.style.display = 'none';
+      }
+      updateScore();
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % flashcards.length;
+      showCard(currentIndex);
+    }
+
+    function updateScore() {
+      if (score > 0) {
+        score -= 1;
+        scoreElement.textContent = "Điểm: " + score;
+      }
+    }
+
+    nextBtn.addEventListener('click', nextCard);
+    flipBtn.addEventListener('click', flipCard);
+
+    window.speechSynthesis.onvoiceschanged = () => {
+      voicesLoaded = true;
+      if (flashcards.length > 0 && wordElement.textContent === "Đang tải...") {
+        showCard(currentIndex);
+      }
+    };
+  </script>
+</body>
+</html>
