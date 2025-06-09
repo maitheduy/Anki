@@ -92,15 +92,25 @@
       text-decoration: underline;
       cursor: pointer;
     }
+    
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="flashcard" id="flashcard">
-      <p id="word" class="word">Đang tải...</p>
-      <div id="extraContent" style="display: none; margin-top: 20px;">
-        <p id="definition" class="definition"></p>
-        <a id="imageLink" href="#" target="_blank">Xem hình ảnh</a>
+      <div class="content-wrapper">
+        <p id="word" class="word">Đang tải...</p>
+        <div id="extraContent" style="display: none; margin-top: 20px; text-align: center;">
+          <p id="definition" class="definition"></p>
+          <a id="imageLink" href="#" target="_blank">Xem hình ảnh huyệt đạo</a>
+        </div>
       </div>
     </div>
 
@@ -114,7 +124,108 @@
   </div>
 
   <script>
-    let flashcards = [];
+    let flashcards = [
+      {
+        "front": "Baihui",
+        "back": "Huyệt Bách Hội, nằm trên đỉnh đầu, giữa hai tai.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-bach-hoi/" 
+      },
+      {
+        "front": "Hegu",
+        "back": "Huyệt Hợp Cốc, nằm ở mu bàn tay, giữa xương ngón cái và trỏ.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-hop-coc/" 
+      },
+      {
+        "front": "Zusanli",
+        "back": "Huyệt Túc Tam Lý, nằm dưới xương bánh chè khoảng 3 thốn.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-tuc-tam-ly/" 
+      },
+      {
+        "front": "Fengchi",
+        "back": "Huyệt Phong Trì, nằm ở chỗ giao giữa gáy và xương cổ.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-phong-tri/" 
+      },
+      {
+        "front": "Neiguan",
+        "back": "Huyệt Nội Quan, nằm ở cẳng tay, khoảng 2 thốn phía trên nếp gấp cổ tay.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-noi-quan/" 
+      },
+      {
+        "front": "Yintang",
+        "back": "Huyệt Ấn Đường, nằm giữa hai lông mày, trên trán.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-an-duong/" 
+      },
+      {
+        "front": "Tianzhu",
+        "back": "Huyệt Thiên Trụ, nằm ở cổ, gần chỗ giao giữa đầu và cổ.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-thien-tru/" 
+      },
+      {
+        "front": "Guanyuan",
+        "back": "Huyệt Quan Nguyên, nằm ở dưới rốn khoảng 3 thốn.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-quan-nguyen/" 
+      },
+      {
+        "front": "Sanyinjiao",
+        "back": "Huyệt Tam Âm Giao, nằm ở mặt trong cẳng chân, cách mắt trong mắt cá chân 3 thốn.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-tam-am-giao/" 
+      },
+      {
+        "front": "Dazhui",
+        "back": "Huyệt Đại Chủy, nằm ở giữa sống lưng, dưới đốt sống cổ thứ bảy.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-dai-chuy/" 
+      },
+      {
+        "front": "Xuehai",
+        "back": "Huyệt Huyết Hải, nằm ở mặt trong đùi, cách đầu gối khoảng 2 thốn.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-huyet-hai/" 
+      },
+      {
+        "front": "Jianjing",
+        "back": "Huyệt Kiên Tỉnh, nằm ở bả vai, giữa vai và cổ.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-kien-ting/" 
+      },
+      {
+        "front": "Huantiao",
+        "back": "Huyệt Hoàn Tiêu, nằm ở mông, trong khớp háng.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-hoan-tieu/" 
+      },
+      {
+        "front": "Yanglingquan",
+        "back": "Huyệt Dương Lăng Tuyền, nằm ở phía ngoài đầu gối.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-duong-lang-tuyen/" 
+      },
+      {
+        "front": "Shixuan",
+        "back": "Huyệt Thập Tuyên, nằm ở đầu các ngón tay.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-thap-tuyen/" 
+      },
+      {
+        "front": "Zhongwan",
+        "back": "Huyệt Trung Quản, nằm ở vùng bụng, trên rốn khoảng 4 thốn.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-trung-quan/" 
+      },
+      {
+        "front": "Lianquan",
+        "back": "Huyệt Liên Quan, nằm trên vùng cổ, ngay dưới cằm.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-lien-quan/" 
+      },
+      {
+        "front": "Quchi",
+        "back": "Huyệt Khúc Trì, nằm ở khuỷu tay, bên ngoài khi co tay lại.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-khuc-tri/" 
+      },
+      {
+        "front": "Xiyan",
+        "back": "Huyệt Tất Yan, nằm ở dưới đầu gối, chỗ lồi của khớp gối.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-tuc-yen/" 
+      },
+      {
+        "front": "Shenmen",
+        "back": "Huyệt Thần Môn, nằm ở tai, sau vành tai, một điểm gần cơ tai.",
+        "imageLink": "https://fujigroup.vn/tin-tuc/huyet-than-mon/" 
+      }
+    ];
     let currentIndex = 0;
     let score = 100;
     let voicesLoaded = false;
@@ -136,29 +247,21 @@
 
     showLoading();
 
-    fetch('vocab.json')
-      .then(response => {
-        if (!response.ok) throw new Error("Không thể tải file vocab.json");
-        return response.json();
-      })
-      .then(data => {
-        flashcards = data;
-        console.log("Dữ liệu đã tải xong:", flashcards);
+    // Load data directly from the array instead of fetching from JSON
+    function loadData() {
+      console.log("Dữ liệu đã tải xong:", flashcards);
 
-        if (voicesLoaded) {
+      if (voicesLoaded) {
+        showCard(currentIndex);
+      } else {
+        window.speechSynthesis.onvoiceschanged = () => {
+          voicesLoaded = true;
           showCard(currentIndex);
-        } else {
-          window.speechSynthesis.onvoiceschanged = () => {
-            voicesLoaded = true;
-            showCard(currentIndex);
-          };
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        wordElement.textContent = "Lỗi tải dữ liệu";
-        extraContent.style.display = 'none';
-      });
+        };
+      }
+    }
+
+    loadData();
 
     function speak(text, lang = 'en-US') {
       const utterance = new SpeechSynthesisUtterance(text);
@@ -185,16 +288,17 @@
     function flipCard() {
       if (extraContent.style.display === 'none') {
         extraContent.style.display = 'block';
-
         const card = flashcards[currentIndex];
-        speak(card.back, 'vi-VN');
-
+        definitionElement.textContent = card.back;
+        
         if (card.imageLink) {
           imageLink.href = card.imageLink;
           imageLink.style.display = 'inline-block';
         } else {
           imageLink.style.display = 'none';
         }
+        
+        speak(card.back, 'vi-VN');
       } else {
         extraContent.style.display = 'none';
         imageLink.style.display = 'none';
