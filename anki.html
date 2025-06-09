@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Card - Học từ mới tiếng Anh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .flashcard {
+            background-color: #fff;
+            width: 900px; /* Mở rộng gấp 3 so với cũ */
+            height: 600px; /* Mở rộng gấp 3 so với cũ */
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .flashcard p {
+            font-size: 40px; /* Tăng kích thước chữ */
+            margin: 0;
+            text-align: center;
+        }
+
+        .word {
+            color: #007BFF; /* Màu sắc cho từ vựng */
+        }
+
+        .definition {
+            display: none;
+            font-size: 28px; /* Kích thước chữ ý nghĩa nhỏ hơn chữ từ */
+            color: #FF5733; /* Màu sắc cho nghĩa */
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .score {
+            font-size: 24px;
+            color: #333;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="flashcard" id="flashcard">
+            <p id="word" class="word">Hello</p>
+            <p id="definition" class="definition">A greeting or expression of goodwill.</p>
+        </div>
+        <div class="buttons">
+            <button id="nextBtn">Tiếp theo</button>
+            <button id="flipBtn">Lật thẻ</button>
+        </div>
+        <div class="score" id="score">Điểm: 100</div> <!-- Hiển thị điểm -->
+    </div>
+
+    <script>
+        let flashcards = [];
+        let currentIndex = 0;
+        let score = 100; // Khởi tạo điểm mặc định là 100
+
+        const wordElement = document.getElementById('word');
+        const definitionElement = document.getElementById('definition');
+        const nextBtn = document.getElementById('nextBtn');
+        const flipBtn = document.getElementById('flipBtn');
+        const scoreElement = document.getElementById('score');
+        const flashcard = document.getElementById('flashcard');
+
+        // Tải dữ liệu từ file vocab.json
+        fetch('vocab.json')
+            .then(response => response.json())
+            .then(data => {
+                flashcards = data; // Lưu trữ dữ liệu từ JSON vào mảng flashcards
+                showCard(currentIndex); // Hiển thị thẻ đầu tiên
+            })
+            .catch(error => console.error("Error loading vocab.json:", error));
+
+        // Hiển thị từ vựng
+        function showCard(index) {
+            wordElement.textContent = flashcards[index].front;
+            definitionElement.textContent = flashcards[index].back;
+            definitionElement.style.display = 'none';
+        }
+
+        // Lật thẻ
+        function flipCard() {
+            if (definitionElement.style.display === 'none') {
+                definitionElement.style.display = 'block';
+            } else {
+                definitionElement.style.display = 'none';
+            }
+            updateScore(); // Trừ 1 điểm mỗi khi lật thẻ
+        }
+
+        // Chuyển sang thẻ tiếp theo
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % flashcards.length;
+            showCard(currentIndex);
+        }
+
+        // Cập nhật điểm
+        function updateScore() {
+            if (score > 0) {
+                score -= 1; // Trừ đi 1 điểm mỗi lần lật thẻ
+                scoreElement.textContent = "Điểm: " + score;
+            }
+        }
+
+        // Sự kiện khi nhấn nút "Tiếp theo"
+        nextBtn.addEventListener('click', nextCard);
+
+        // Sự kiện khi nhấn nút "Lật thẻ"
+        flipBtn.addEventListener('click', flipCard);
+    </script>
+</body>
+</html>
