@@ -83,18 +83,33 @@
       color: #333;
       margin-top: 20px;
     }
+
+    #imageLink {
+      display: none;
+      margin-top: 15px;
+      font-size: 18px;
+      color: #007BFF;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="flashcard" id="flashcard">
       <p id="word" class="word">Đang tải...</p>
-      <p id="definition" class="definition"></p>
+      <div id="extraContent" style="display: none; margin-top: 20px;">
+        <p id="definition" class="definition"></p>
+        <a id="imageLink" href="#" target="_blank">Xem hình ảnh</a>
+      </div>
     </div>
+
     <div class="buttons">
+      <button id="playAgainBtn" style="display: none;">Play Again</button>
       <button id="nextBtn">Tiếp theo</button>
       <button id="flipBtn">Lật thẻ</button>
     </div>
+
     <div class="score" id="score">Điểm: 100</div>
   </div>
 
@@ -106,13 +121,17 @@
 
     const wordElement = document.getElementById('word');
     const definitionElement = document.getElementById('definition');
+    const extraContent = document.getElementById('extraContent');
+    const imageLink = document.getElementById('imageLink');
     const nextBtn = document.getElementById('nextBtn');
     const flipBtn = document.getElementById('flipBtn');
+    const playAgainBtn = document.getElementById('playAgainBtn');
     const scoreElement = document.getElementById('score');
 
     function showLoading() {
       wordElement.textContent = "Đang tải...";
-      definitionElement.style.display = 'none';
+      extraContent.style.display = 'none';
+      imageLink.style.display = 'none';
     }
 
     showLoading();
@@ -138,7 +157,7 @@
       .catch(error => {
         console.error(error);
         wordElement.textContent = "Lỗi tải dữ liệu";
-        definitionElement.style.display = 'none';
+        extraContent.style.display = 'none';
       });
 
     function speak(text, lang = 'en-US') {
@@ -157,18 +176,28 @@
       const card = flashcards[index];
       wordElement.textContent = card.front;
       definitionElement.textContent = card.back;
-      definitionElement.style.display = 'none';
+      extraContent.style.display = 'none';
+      imageLink.style.display = 'none';
 
       speak(card.front, 'en-US');
     }
 
     function flipCard() {
-      if (definitionElement.style.display === 'none') {
-        definitionElement.style.display = 'block';
+      if (extraContent.style.display === 'none') {
+        extraContent.style.display = 'block';
+
         const card = flashcards[currentIndex];
         speak(card.back, 'vi-VN');
+
+        if (card.imageLink) {
+          imageLink.href = card.imageLink;
+          imageLink.style.display = 'inline-block';
+        } else {
+          imageLink.style.display = 'none';
+        }
       } else {
-        definitionElement.style.display = 'none';
+        extraContent.style.display = 'none';
+        imageLink.style.display = 'none';
       }
       updateScore();
     }
@@ -178,15 +207,28 @@
       showCard(currentIndex);
     }
 
+    function resetGame() {
+      currentIndex = 0;
+      score = 100;
+      scoreElement.textContent = "Điểm: " + score;
+      playAgainBtn.style.display = 'none';
+      showCard(currentIndex);
+    }
+
     function updateScore() {
       if (score > 0) {
         score -= 1;
         scoreElement.textContent = "Điểm: " + score;
       }
+
+      if (currentIndex === flashcards.length - 1) {
+        playAgainBtn.style.display = 'inline-block';
+      }
     }
 
     nextBtn.addEventListener('click', nextCard);
     flipBtn.addEventListener('click', flipCard);
+    playAgainBtn.addEventListener('click', resetGame);
 
     window.speechSynthesis.onvoiceschanged = () => {
       voicesLoaded = true;
