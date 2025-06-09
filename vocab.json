@@ -1,86 +1,102 @@
 [
-    {
-        "front": "Baihui",
-        "back": "Huyệt Bách Hội, nằm trên đỉnh đầu, giữa hai tai."
-    },
-    {
-        "front": "Hegu",
-        "back": "Huyệt Hợp Cốc, nằm ở mu bàn tay, giữa xương ngón tay cái và trỏ."
-    },
-    {
-        "front": "Shenmen",
-        "back": "Huyệt Thần Môn, nằm ở tai, sau vành tai, một điểm gần cơ tai."
-    },
-    {
-        "front": "Zusanli",
-        "back": "Huyệt Túc Lâm Khấp, nằm ở dưới xương bánh chè khoảng 3 thốn."
-    },
-    {
-        "front": "Fengchi",
-        "back": "Huyệt Phong Chỉ, nằm ở chỗ giao giữa gáy và xương cổ."
-    },
-    {
-        "front": "Neiguan",
-        "back": "Huyệt Nội Quan, nằm ở cẳng tay, khoảng 2 thốn phía trên cổ tay."
-    },
-    {
-        "front": "Yintang",
-        "back": "Huyệt Ấn Đường, nằm giữa hai lông mày, trên trán."
-    },
-    {
-        "front": "Tianzhu",
-        "back": "Huyệt Thiên Trụ, nằm ở cổ, gần chỗ giao giữa đầu và cổ."
-    },
-    {
-        "front": "Guanyuan",
-        "back": "Huyệt Quan Nguyên, nằm ở dưới rốn, khoảng 3 thốn."
-    },
-    {
-        "front": "Sanyinjiao",
-        "back": "Huyệt Tam Âm Giao, nằm ở mặt trong cẳng chân, cách đầu gối khoảng 3 thốn."
-    },
-    {
-        "front": "Dazhui",
-        "back": "Huyệt Đại Chủy, nằm ở giữa sống lưng, dưới đốt sống cổ."
-    },
-    {
-        "front": "Xuehai",
-        "back": "Huyệt Tuyến Hải, nằm ở mặt trong đùi, cách đầu gối khoảng 3 thốn."
-    },
-    {
-        "front": "Jianjing",
-        "back": "Huyệt Kiên Tỉnh, nằm ở bả vai, giữa vai và cổ."
-    },
-    {
-        "front": "Huantiao",
-        "back": "Huyệt Hoàn Tiêu, nằm ở mông, trong khớp háng."
-    },
-    {
-        "front": "Yanglingquan",
-        "back": "Huyệt Dương Lăng Tuyền, nằm ở phía ngoài của đầu gối."
-    },
-    {
-        "front": "Shixuan",
-        "back": "Huyệt Thập Xuân, nằm ở đầu ngón tay, 10 huyệt ở đầu các ngón tay."
-    },
-    {
-        "front": "Zhongwan",
-        "back": "Huyệt Trung Quán, nằm ở vùng bụng, trên rốn khoảng 4 thốn."
-    },
-    {
-        "front": "Lianquan",
-        "back": "Huyệt Liên Quan, nằm trên vùng cổ, ngay dưới cằm."
-    },
-    {
-        "front": "Hegu",
-        "back": "Huyệt Hợp Cốc, một trong những huyệt nổi tiếng trong việc giảm đau."
-    },
-    {
-        "front": "Xiyan",
-        "back": "Huyệt Tất Yan, nằm ở dưới đầu gối, chỗ lồi của khớp gối."
-    },
-    {
-        "front": "Quchi",
-        "back": "Huyệt Quý Chí, nằm ở khuỷu tay, ở bên ngoài tay."
-    }
+  {
+    "front": "Baihui",
+    "back": "Huyệt Bách Hội, nằm trên đỉnh đầu, giữa hai tai.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-bach-hoi/" 
+  },
+  {
+    "front": "Hegu",
+    "back": "Huyệt Hợp Cốc, nằm ở mu bàn tay, giữa xương ngón cái và trỏ.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-hop-coc/" 
+  },
+  {
+    "front": "Zusanli",
+    "back": "Huyệt Túc Tam Lý, nằm dưới xương bánh chè khoảng 3 thốn.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-tuc-tam-ly/" 
+  },
+  {
+    "front": "Fengchi",
+    "back": "Huyệt Phong Trì, nằm ở chỗ giao giữa gáy và xương cổ.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-phong-tri/" 
+  },
+  {
+    "front": "Neiguan",
+    "back": "Huyệt Nội Quan, nằm ở cẳng tay, khoảng 2 thốn phía trên nếp gấp cổ tay.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-noi-quan/" 
+  },
+  {
+    "front": "Yintang",
+    "back": "Huyệt Ấn Đường, nằm giữa hai lông mày, trên trán.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-an-duong/" 
+  },
+  {
+    "front": "Tianzhu",
+    "back": "Huyệt Thiên Trụ, nằm ở cổ, gần chỗ giao giữa đầu và cổ.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-thien-tru/" 
+  },
+  {
+    "front": "Guanyuan",
+    "back": "Huyệt Quan Nguyên, nằm ở dưới rốn khoảng 3 thốn.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-quan-nguyen/" 
+  },
+  {
+    "front": "Sanyinjiao",
+    "back": "Huyệt Tam Âm Giao, nằm ở mặt trong cẳng chân, cách mắt trong mắt cá chân 3 thốn.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-tam-am-giao/" 
+  },
+  {
+    "front": "Dazhui",
+    "back": "Huyệt Đại Chủy, nằm ở giữa sống lưng, dưới đốt sống cổ thứ bảy.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-dai-chuy/" 
+  },
+  {
+    "front": "Xuehai",
+    "back": "Huyệt Huyết Hải, nằm ở mặt trong đùi, cách đầu gối khoảng 2 thốn.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-huyet-hai/" 
+  },
+  {
+    "front": "Jianjing",
+    "back": "Huyệt Kiên Tỉnh, nằm ở bả vai, giữa vai và cổ.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-kien-ting/" 
+  },
+  {
+    "front": "Huantiao",
+    "back": "Huyệt Hoàn Tiêu, nằm ở mông, trong khớp háng.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-hoan-tieu/" 
+  },
+  {
+    "front": "Yanglingquan",
+    "back": "Huyệt Dương Lăng Tuyền, nằm ở phía ngoài đầu gối.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-duong-lang-tuyen/" 
+  },
+  {
+    "front": "Shixuan",
+    "back": "Huyệt Thập Tuyên, nằm ở đầu các ngón tay.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-thap-tuyen/" 
+  },
+  {
+    "front": "Zhongwan",
+    "back": "Huyệt Trung Quản, nằm ở vùng bụng, trên rốn khoảng 4 thốn.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-trung-quan/" 
+  },
+  {
+    "front": "Lianquan",
+    "back": "Huyệt Liên Quan, nằm trên vùng cổ, ngay dưới cằm.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-lien-quan/" 
+  },
+  {
+    "front": "Quchi",
+    "back": "Huyệt Khúc Trì, nằm ở khuỷu tay, bên ngoài khi co tay lại.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-khuc-tri/" 
+  },
+  {
+    "front": "Xiyan",
+    "back": "Huyệt Tất Yan, nằm ở dưới đầu gối, chỗ lồi của khớp gối.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-tuc-yen/" 
+  },
+  {
+    "front": "Shenmen",
+    "back": "Huyệt Thần Môn, nằm ở tai, sau vành tai, một điểm gần cơ tai.",
+    "imageLink": "https://fujigroup.vn/tin-tuc/huyet-than-mon/" 
+  }
 ]
