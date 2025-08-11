@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học cùng AI - Công cụ Toàn Năng</title>
+    
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS (Bắt buộc cho Trình quản lý Prompt) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* === CSS CHÍNH CỦA TOÀN BỘ TRANG === */
+        :root {
+            --primary-color: #00a8e8; --secondary-color: #ffd60a; --accent-color: #4CAF50; --youtube-color: #FF0000;
+            --bg-color: #fefae0; --card-bg: #ffffff; --text-color: #3d405b; --primary-text: #0077b6;
+            --border-color: #e0e0e0; --shadow-color: rgba(0, 168, 232, 0.15);
+        }
+        body { font-family: 'Quicksand', 'Baloo 2', cursive, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; line-height: 1.7; }
+        .container { max-width: 1400px; margin: 0 auto; background-color: var(--card-bg); border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px var(--shadow-color); border: 2px solid #fae19d; }
+        
+        h1 { 
+            font-family: 'Baloo 2', cursive;
+            text-align: center; margin-bottom: 25px; 
+            font-size: 3.5em; 
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.05);
+        }
+        
+        h2 { color: var(--primary-text); font-weight: 700; border-bottom: 3px dashed var(--primary-color); padding-bottom: 10px; margin-top: 0; margin-bottom: 20px; font-size: 1.6em; }
+        .main-layout { display: flex; gap: 30px; flex-wrap: wrap; }
+        .main-content { flex: 3; min-width: 350px; }
+        .sidebar { flex: 1; min-width: 300px; }
+        .step-card, .widget-card { background-color: #fdfdfd; border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+        textarea, input[type="text"].log-input { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; font-family: 'Quicksand', sans-serif; font-size: 1em; margin-bottom: 10px; box-sizing: border-box; transition: border-color 0.3s, box-shadow 0.3s; }
+        textarea:focus, input[type="text"].log-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 4px var(--shadow-color); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 25px; border: none; border-radius: 30px; font-family: 'Baloo 2', cursive, sans-serif; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; color: white; letter-spacing: 0.5px; }
+        .btn:hover { transform: translateY(-3px); }
+        .btn-secondary { background-color: var(--primary-color); box-shadow: 0 4px 15px 0 rgba(0, 168, 232, 0.4); }
+        .btn-secondary:hover { background-color: #0095d1; }
+        .btn-accent { background-color: var(--accent-color); box-shadow: 0 4px 15px 0 rgba(76, 175, 80, 0.4); }
+        .btn-accent:hover { background-color: #43a047; }
+        .btn-youtube { background-color: var(--youtube-color); box-shadow: 0 4px 15px 0 rgba(255, 0, 0, 0.4); }
+        .btn-youtube:hover { background-color: #d60000; }
+        
+        /* CSS CHO MODAL (Dùng chung) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: none; align-items: flex-start; justify-content: center; z-index: 1000; padding-top: 5vh; overflow-y: auto; }
+        .modal-container { background: white; padding: 25px; border-radius: 15px; width: 95%; max-width: 1000px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); max-height: 90vh; display: flex; flex-direction: column;}
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #ccc; margin-bottom: 15px;}
+        #modal-content-wrapper, .modal-body { flex-grow: 1; overflow-y: auto; padding-right: 15px; margin-right: -15px;}
+        .modal-close-btn { background: none; border: none; font-size: 2.5rem; font-weight: bold; color: #aaa; cursor: pointer; line-height: 1; transition: color 0.2s; }
+        .modal-close-btn:hover { color: #f44336; }
+
+        /* CSS cho Sổ tay bài học */
+        #learning-log-list { list-style: none; padding: 0; margin-top: 20px; }
+        #learning-log-list li { background: #f0f8ff; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.2s; }
+        #learning-log-list li:hover { background-color: #e6f3ff; }
+        #learning-log-list .log-title { font-weight: 600; cursor: pointer; color: #005a8d; }
+        #learning-log-list .log-actions button { background: none; border: none; cursor: pointer; font-size: 1rem; margin-left: 10px; }
+        #learning-log-list .edit-log-btn { color: #2196F3; }
+        #learning-log-list .delete-log-btn { color: #f44336; }
+
+        /* CSS cho Trình quản lý Prompt */
+        .mic-button { transition: all 0.3s ease; padding: 0.5rem; border-radius: 50%; }
+        .mic-button.recording { background-color: #f87171; color: white; animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(248, 113, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); }
+        }
+        #voice-status { text-align: center; color: #6b7280; margin-top: 0.5rem; min-height: 1.5rem; }
+    </style>
+</head>
+<body>
+    <!-- === GIAO DIỆN CHÍNH CỦA TRANG === -->
+    <div class="container">
+        <h1><i class="fa-solid fa-shapes"></i> Học cùng AI</h1>
+        <div class="main-layout">
+            <div class="main-content">
+                <!-- MỤC 1: ĐÃ SỬA TIÊU ĐỀ -->
+                <div class="step-card">
+                    <h2><i class="fa-solid fa-camera-retro"></i> AI giúp bạn đọc nội dung của ảnh chụp</h2>
+                    <p>Nhấn nút dưới để sao chép câu lệnh "mồi". Sau đó, vào trang AI, <strong>tải ảnh lên</strong> và dán câu lệnh này vào để bắt đầu.</p>
+                    <button class="btn btn-secondary" id="generate-identify-prompt-btn" style="width: 100%; font-size: 1.2em; padding: 15px;">
+                        <i class="fas fa-robot"></i> Lấy lệnh đọc ảnh & Mở AI
+                    </button>
+                </div>
+                <!-- MỤC 2: MỤC MỚI ĐƯỢC THÊM VÀO -->
+                <div class="step-card">
+                    <h2><i class="fa-brands fa-youtube" style="color: var(--youtube-color);"></i> Tóm tắt nội dung Video trên YouTube</h2>
+                    <p>Sao chép câu lệnh chuyên sâu để phân tích video YouTube và gửi đến AI. Dán lệnh này cùng với link video bạn muốn tóm tắt.</p>
+                    <button class="btn btn-youtube" id="generate-youtube-summary-btn" style="width: 100%; font-size: 1.2em; padding: 15px;">
+                        <i class="fas fa-file-video"></i> Lấy lệnh tóm tắt Video
+                    </button>
+                </div>
+                <!-- MỤC 3: Thư viện Prompt -->
+                <div class="step-card">
+                    <h2><i class="fa-solid fa-book-atlas"></i> Thư viện Prompt</h2>
+                    <p>Tạo, lưu trữ và quản lý các câu lệnh (prompt) yêu thích của bạn để sử dụng lại bất cứ lúc nào.</p>
+                    <button class="btn btn-accent" id="open-prompt-manager-btn" style="width: 100%; font-size: 1.2em; padding: 15px;">
+                        <i class="fas fa-folder-open"></i> Mở Trình quản lý Prompt
+                    </button>
+                </div>
+            </div>
+            <div class="sidebar">
+                <div class="widget-card">
+                    <h2><i class="fas fa-book-bookmark"></i> Sổ tay bài học</h2>
+                    <p>Sau khi học xong, hãy lưu lại những kiến thức hay vào đây nhé.</p>
+                    <button class="btn btn-accent" id="create-new-log-btn" style="width: 100%;"><i class="fas fa-plus"></i> Tạo bài học mới</button>
+                    <ul id="learning-log-list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === CÁC MODAL (CỬA SỔ POP-UP) === -->
+
+    <!-- MODAL 1: SỔ TAY BÀI HỌC -->
+    <div class="modal-overlay" id="log-modal">
+        <div class="modal-container" style="max-width: 700px;">
+             <div class="modal-header">
+                <h2 id="log-modal-title">Tạo bài học mới</h2>
+                <button class="modal-close-btn" id="log-modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="log-title-input" class="log-input" placeholder="Tiêu đề bài học...">
+                <textarea id="log-content-input" class="log-input" rows="10" placeholder="Ghi chú nội dung đã học..."></textarea>
+            </div>
+            <div style="text-align: right; padding-top: 15px; border-top: 1px solid #eee;">
+                 <button class="btn btn-secondary" id="save-log-btn"><i class="fas fa-save"></i> Lưu bài học</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: TRÌNH QUẢN LÝ PROMPT -->
+    <div class="modal-overlay" id="prompt-manager-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="text-2xl font-bold text-indigo-600">📚 Quản lý Prompt Cá Nhân</h2>
+                <button class="modal-close-btn" id="close-prompt-manager-btn">&times;</button>
+            </div>
+            <div id="modal-content-wrapper">
+                <!-- Toàn bộ giao diện của Trình quản lý Prompt -->
+                <div class="bg-white rounded-lg">
+                    <!-- Khu vực nhập liệu -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div class="flex items-center gap-2">
+                        <input id="title" type="text" placeholder="Tiêu đề" class="border rounded p-2 w-full" />
+                        <button id="mic-title" class="mic-button text-gray-600 hover:text-indigo-500" title="Nhập tiêu đề bằng giọng nói">🎤</button>
+                      </div>
+                      <div class="flex items-center gap-2 md:col-span-2">
+                        <input id="content" type="text" placeholder="Nội dung prompt hoặc URL" class="border rounded p-2 w-full" />
+                        <button id="mic-content" class="mic-button text-gray-600 hover:text-indigo-500" title="Nhập nội dung bằng giọng nói">🎤</button>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div class="flex items-center gap-2">
+                        <input id="category" type="text" placeholder="Danh mục (VD: Toán, Văn...)" class="border rounded p-2 w-full" />
+                        <button id="mic-category" class="mic-button text-gray-600 hover:text-indigo-500" title="Nhập danh mục bằng giọng nói">🎤</button>
+                      </div>
+                    </div>
+                    <!-- Các nút chức năng chính -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                      <button onclick="addPrompt()" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded">➕ Thêm Prompt</button>
+                      <button onclick="exportPrompts()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">⬇️ Xuất JSON</button>
+                      <input type="file" id="importFile" class="hidden" onchange="importPrompts(event)" />
+                      <button onclick="document.getElementById('importFile').click()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">⬆️ Nhập Prompt</button>
+                      <input id="deleteCategoryInput" type="text" placeholder="Nhập danh mục cần xoá" class="border rounded p-2" />
+                      <button onclick="deleteCategory()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">🗑️ Xoá danh mục</button>
+                    </div>
+                    <!-- Bộ lọc và tìm kiếm -->
+                    <div class="mb-4 flex items-center gap-4">
+                      <label class="font-medium">Chế độ hiển thị:</label>
+                      <select id="viewMode" onchange="renderPrompts()" class="border rounded p-2">
+                        <option value="grouped" selected>Theo nhóm danh mục</option>
+                        <option value="all">Tất cả prompt</option>
+                      </select>
+                    </div>
+                    <div id="categoryFilterWrap" class="mb-4" style="display: block;">
+                      <label for="categoryFilter" class="font-medium mr-2">Chọn danh mục:</label>
+                      <select id="categoryFilter" onchange="renderPrompts()" class="border rounded p-2">
+                        <option value="all">Tất cả</option>
+                      </select>
+                    </div>
+                    <input id="search" oninput="renderPrompts()" type="text" placeholder="🔍 Tìm theo tiêu đề hoặc nội dung..." class="w-full border rounded p-2 mb-4" />
+                    <div id="voice-status"></div>
+                    <!-- Nơi hiển thị danh sách prompt -->
+                    <div id="promptList" class="space-y-6"></div>
+                    <div id="pagination" class="mt-6 flex justify-center gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === TOÀN BỘ JAVASCRIPT CỦA TRANG === -->
+    <script>
+        // --- PHẦN 1: LOGIC CỦA TRANG CHÍNH "HỌC CÙNG AI" ---
+
+        const generateIdentifyBtn = document.getElementById('generate-identify-prompt-btn');
+        const generateYoutubeSummaryBtn = document.getElementById('generate-youtube-summary-btn');
+        const openPromptManagerBtn = document.getElementById('open-prompt-manager-btn');
+        const promptManagerModal = document.getElementById('prompt-manager-modal');
+        const closePromptManagerBtn = document.getElementById('close-prompt-manager-btn');
+        
+        // Câu lệnh "mồi" để đọc ảnh
+        const imageReaderPrompt = `Hãy chép lại nội dung của bức ảnh mà tôi upload lên ở đây. Sau đó bạn hãy là một gia sư ( trình độ siêu đẳng, luôn luôn giảng bài kèm ẩn dụ dễ hiểu ) tất cả các môn học , bạn rất vui tính và am hiểu học sinh tiểu học, trung học cơ sở và cả đại học và hỏi tôi xem tôi muốn giải bài giúp hay làm những gì từ bức ảnh này.`;
+
+        // Câu lệnh "siêu cấp" để tóm tắt video YouTube
+        const youtubeSummaryPrompt = `Hãy tóm tắt nội dung video của youtube mà tôi upload lên ở đây hoặc đưa link dưới đây  theo những yêu cầu chi tiết như sau:
+
+# System Prompt: Phân tích Video YouTube
+## Vai trò
+Bạn là một chuyên gia phân tích và tóm tắt nội dung video, chuyên về việc trích xuất thông tin quan trọng từ các video YouTube và trình bày một cách có cấu trúc, dễ hiểu.
+
+## Nhiệm vụ chính
+Khi nhận được đường link YouTube, bạn cần tạo ra bản tóm tắt (summary) theo cấu trúc bốn phần bắt buộc dưới đây:
+
+### PHẦN 1: TỔNG QUAN VÀ INSIGHT CỐT LÕI
+- Trình bày ý tưởng chính (main idea) và thông điệp cốt lõi (core message) của video
+- Xác định mục đích (purpose) và đối tượng mục tiêu (target audience) 
+- Đưa ra đánh giá về giá trị thông tin (information value) và tính ứng dụng (applicability)
+- Nêu insight quan trọng nhất mà người xem có thể thu được
+
+**CÂY THƯ MỤC NỘI DUNG (Content Directory Tree):**
+- **BẮT BUỘC sử dụng ký tự cây thư mục**: \`├──\` cho các nhánh con, \`└──\` cho nhánh cuối cùng
+- Tạo cấu trúc cây thư mục dạng **overview structure** theo format: \`[time start] - [time end] : [tiêu đề đầu mục chính]\`
+- **Chỉ liệt kê các đầu mục chính** (main topics), không viết chi tiết nội dung
+- Sử dụng indentation (thụt lề) với ký tự tree để thể hiện sub-topics level 1
+- **Mục đích**: Tạo roadmap tổng thể cho người đọc nhanh chóng nắm bắt cấu trúc video
+- **Ngắn gọn**: Mỗi đầu mục chỉ 1 dòng, tối đa 10-15 từ
+- **Định dạng bắt buộc**: Phải có ít nhất 1 main topic có sub-topics để thể hiện cây thư mục thật sự
+
+### PHẦN 2: TÓM TẮT THEO TIMELINE (Chi tiết nội dung)
+- **Đánh số thứ tự**: Sử dụng numbering khớp với cây thư mục ở Phần 1 (1, 2, 3...)
+- **Mục đích**: Phân tích chi tiết nội dung từng segment đã outline trong cây thư mục
+- **Ưu tiên cao**: Trích xuất các nội dung mang tính cá nhân hóa (personalized content):
+  - Kinh nghiệm cá nhân (personal experience) của người nói
+  - Quan điểm chủ quan (subjective viewpoint) và đánh giá cá nhân
+  - Câu chuyện thực tế (real-life stories) và ví dụ cụ thể
+  - Lời khuyên dựa trên trải nghiệm (experience-based advice)
+  - Phản ánh và suy ngẫm cá nhân (personal reflection)
+- Ghi chú các thời điểm quan trọng (key moments) và transition points
+- Đánh dấu những phần có tính tương tác (interactive elements) với khán giả
+- **Format**: \`[Số thứ tự]. [Timestamp] - [Tiêu đề segment]: [Detailed content analysis]\`
+
+### PHẦN 3: ĐIỀU CHỈNH ĐỘ DÀI THEO TÍNH CHẤT CONTENT
+**Tiêu chí phân loại:**
+
+#### Video học thuật/giáo dục (Academic/Educational):
+- **Đặc điểm**: Có cấu trúc logic, nội dung chuyên môn, dữ liệu cụ thể
+- **Độ dài tóm tắt**: Chi tiết, 800-1500 từ
+- **Yêu cầu**: Bao gồm methodology, data points, conclusions, references
+- **Focus**: Kiến thức chuyên môn, research findings, theoretical frameworks
+
+#### Video giải trí/lifestyle (Entertainment/Lifestyle):
+- **Đặc điểm**: Nội dung nhẹ nhàng, chia sẻ trải nghiệm, storytelling
+- **Độ dài tóm tắt**: Ngắn gọn, 300-600 từ  
+- **Yêu cầu**: Highlights chính, memorable moments, key takeaways
+- **Focus**: Entertainment value, personal stories, practical tips
+
+### **PHẦN 4: KEY TAKEAWAYS**
+
+**Nội dung bắt buộc phải bao gồm:**
+- **Ít nhất 3-5 điểm chính** được trích xuất từ video
+- **Actionable insights** - những gì người xem có thể áp dụng ngay
+- **Memorable quotes** - trích dẫn những câu nói ấn tượng nhất
+- **Practical applications** - ứng dụng thực tế của kiến thức
+- **Personal reflections** - suy ngẫm và đánh giá về nội dung
+- **Value proposition** - giá trị cốt lõi mà video mang lại
+
+**Format bắt buộc:**
+\`\`\`
+## 💡 KEY TAKEAWAYS
+
+✅ **[Takeaway 1]**: [Mô tả chi tiết và ứng dụng thực tế]
+✅ **[Takeaway 2]**: [Mô tả chi tiết và ứng dụng thực tế]
+✅ **[Takeaway 3]**: [Mô tả chi tiết và ứng dụng thực tế]
+📝 **Quote đáng nhớ**: "[Trích dẫn trực tiếp từ video]"
+🎯 **Hành động cụ thể**: [Những việc người xem nên làm sau khi xem video]
+\`\`\`
+## Quy tắc và nguyên tắc
+### Nguyên tắc viết:
+- Sử dụng ngôn ngữ rõ ràng, dễ hiểu
+- Giữ tính khách quan (objectivity) nhưng không bỏ qua các yếu tố subjective
+- Trích dẫn trực tiếp (direct quotes) các phát ngôn quan trọng
+- Sử dụng bullet points cho các danh sách và timeline
+- **NGHIÊM CẤM**: Bỏ qua phần KEY TAKEAWAYS - đây là requirement bắt buộc
+
+### Yêu cầu kỹ thuật:
+- Luôn bắt đầu bằng xác định loại video (content type classification)
+- Ghi rõ thời lượng video (duration) và ngày đăng (upload date)
+- **QUAN TRỌNG**: Trong cây thư mục, BẮT BUỘC sử dụng ký tự \`├──\` và \`└──\` để tạo tree structure thật sự
+- Cây thư mục phải có ít nhất 1 main topic chứa sub-topics để thể hiện cấu trúc phân cấp
+- Kiểm tra tính chính xác (accuracy) của thông tin trước khi tóm tắt
+- Đánh giá credibility của nguồn thông tin
+- **BẮT BUỘC**: Phải hoàn thành đầy đủ phần KEY TAKEAWAYS với minimum 3 takeaways
+
+### Lưu ý đặc biệt:
+- **FORMAT CÂY THƯ MỤC**: Luôn luôn sử dụng ký tự \`├──\` cho sub-topics ở giữa và \`└──\` cho sub-topic cuối cùng
+- **VÍ DỤ ĐÚNG**:
+  \`\`\`
+  2. [05:31] - [15:45] : Chủ đề chính
+     ├── [07:20] - [09:10] : Sub-topic 1  
+     ├── [09:11] - [12:45] : Sub-topic 2
+     └── [12:46] - [15:45] : Sub-topic 3
+  \`\`\`
+- **VÍ DỤ SAI**: Chỉ liệt kê đơn thuần mà không có ký tự cây
+- Tránh bias cá nhân trong quá trình tóm tắt
+- Không bỏ sót information gaps hoặc contradictions trong video
+- Highlight các actionable insights mà người xem có thể áp dụng ngay
+- Đề xuất related topics hoặc follow-up questions nếu phù hợp
+- **CRITICAL**: Nếu thiếu phần KEY TAKEAWAYS, coi như hoàn thành không đạt yêu cầu
+
+## Kiểm tra chất lượng đầu ra (Quality Check)
+
+**Trước khi hoàn thành response, bắt buộc phải kiểm tra:**
+☑️ Có đầy đủ 4 phần chính: Tổng quan, Timeline, Nội dung chi tiết, KEY TAKEAWAYS
+☑️ Cây thư mục sử dụng đúng ký tự \`├──\` và \`└──\`
+☑️ Phần KEY TAKEAWAYS có ít nhất 3 điểm chính
+☑️ Có trích dẫn quote đáng nhớ
+☑️ Có hành động cụ thể cho người xem
+☑️ Format đúng theo template được chỉ định
+## Format đầu ra chuẩn:
+\`\`\`
+🎥 **[TIÊU ĐỀ VIDEO]**
+📅 Thời lượng: [X phút] | Đăng ngày: [DD/MM/YYYY]
+🎯 Loại content: [Academic/Educational/Entertainment/Lifestyle]
+---
+
+## 🔍 TỔNG QUAN & INSIGHT CỐT LÕI
+[Nội dung tổng quan]
+### 📋 CÂY THƯ MỤC NỘI DUNG:
+\`\`\`
+1. [00:00] - [05:30] : Mở đầu và giới thiệu chủ đề
+2. [05:31] - [15:45] : Phân tích vấn đề chính
+   ├── [07:20] - [09:10] : Nguyên nhân
+   ├── [09:11] - [12:45] : Hậu quả  
+   └── [12:46] - [15:45] : Tác động
+3. [15:46] - [25:20] : Đưa ra giải pháp
+   ├── [16:00] - [20:30] : Giải pháp ngắn hạn
+   └── [20:31] - [25:20] : Giải pháp dài hạn
+4. [25:21] - [30:00] : Kết luận và hành động
+\`\`\`
+---
+## ⏱️ TÓM TẮT THEO TIMELINE
+
+**1. [00:00-05:30] - Mở đầu và giới thiệu chủ đề:**
+[Chi tiết phân tích nội dung, trích dẫn quote, personal insights, experience cá nhân...]
+
+**2. [05:31-12:45] - Phân tích vấn đề chính:**
+[Chi tiết nội dung với focus vào cá nhân hóa, câu chuyện thực tế, đánh giá chủ quan...]
+  - **2.1 [07:20-09:10] - Nguyên nhân:** [Chi tiết phân tích sub-topic]
+  - **2.2 [09:11-12:45] - Hậu quả:** [Chi tiết phân tích sub-topic]
+
+**3. [12:46-18:20] - Đưa ra giải pháp:**
+[Chi tiết nội dung, actionable insights, lời khuyên dựa trên kinh nghiệm...]
+
+**4. [18:21-22:00] - Kết luận và hành động:**
+[Chi tiết nội dung, call-to-action, key takeaways...]
+---
+
+## 💡 KEY TAKEAWAYS **[BẮT BUỘC - KHÔNG ĐƯỢC BỎ QUA]**
+
+✅ **[Takeaway 1]**: [Mô tả chi tiết và ứng dụng thực tế]
+✅ **[Takeaway 2]**: [Mô tả chi tiết và ứng dụng thực tế]
+✅ **[Takeaway 3]**: [Mô tả chi tiết và ứng dụng thực tế]
+📝 **Quote đáng nhớ**: "[Trích dẫn trực tiếp từ video]"
+🎯 **Hành động cụ thể**: [Những việc người xem nên làm sau khi xem video]
+---
+## 🔗 RELATED SUGGESTIONS
+[Đề xuất chủ đề liên quan nếu có]
+\`\`\`
+Hãy luôn đảm bảo bản tóm tắt cung cấp giá trị thực sự cho người đọc và giúp họ tiết kiệm thời gian while maintaining the essence của video gốc.
+`;
+        
+        // Hàm trợ giúp để mở AI
+        async function sendPromptToAI(promptText) {
+            try {
+                await navigator.clipboard.writeText(promptText);
+                alert('✅ Đã sao chép câu lệnh! Chuẩn bị chuyển đến trang AI...');
+                window.open('https://aistudio.google.com/u/2/prompts/new_chat', '_blank');
+            } catch (err) {
+                console.error('Lỗi sao chép:', err);
+                alert('❌ Không thể tự động sao chép câu lệnh.');
+            }
+        }
+        
+        generateIdentifyBtn.addEventListener('click', () => sendPromptToAI(imageReaderPrompt));
+        generateYoutubeSummaryBtn.addEventListener('click', () => sendPromptToAI(youtubeSummaryPrompt));
+        openPromptManagerBtn.addEventListener('click', () => { promptManagerModal.style.display = 'flex'; });
+        closePromptManagerBtn.addEventListener('click', () => { promptManagerModal.style.display = 'none'; });
+
+        // --- PHẦN 2: LOGIC CỦA SỔ TAY BÀI HỌC ---
+
+        const createNewLogBtn = document.getElementById('create-new-log-btn');
+        const learningLogList = document.getElementById('learning-log-list');
+        const logModal = document.getElementById('log-modal');
+        const logModalCloseBtn = document.getElementById('log-modal-close-btn');
+        const logModalTitle = document.getElementById('log-modal-title');
+        const logTitleInput = document.getElementById('log-title-input');
+        const logContentInput = document.getElementById('log-content-input');
+        const saveLogBtn = document.getElementById('save-log-btn');
+        
+        let logs = JSON.parse(localStorage.getItem('learningLogs')) || [
+            { id: 1, title: "Cách giải phương trình bậc hai", content: "Để giải phương trình ax^2 + bx + c = 0, ta tính delta = b^2 - 4ac.\n- Nếu delta > 0, có 2 nghiệm phân biệt.\n- Nếu delta = 0, có nghiệm kép.\n- Nếu delta < 0, phương trình vô nghiệm."}
+        ];
+        let currentEditingLogId = null;
+
+        function saveLogs() { localStorage.setItem('learningLogs', JSON.stringify(logs)); }
+        function renderLogs() {
+            learningLogList.innerHTML = '';
+            if (logs.length === 0) {
+                learningLogList.innerHTML = `<p style="text-align:center; color: #888; margin-top:20px;">Chưa có bài học nào.</p>`;
+                return;
+            }
+            logs.forEach(log => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="log-title">${log.title}</span>
+                    <div class="log-actions">
+                        <button class="edit-log-btn" data-id="${log.id}" title="Sửa"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="delete-log-btn" data-id="${log.id}" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `;
+                learningLogList.appendChild(li);
+            });
+        }
+        function openLogModalForNew() {
+            currentEditingLogId = null;
+            logModalTitle.textContent = 'Tạo bài học mới';
+            logTitleInput.value = '';
+            logContentInput.value = '';
+            logModal.style.display = 'flex';
+        }
+        function openLogModalForEdit(id) {
+            const logToEdit = logs.find(log => log.id === id);
+            if (logToEdit) {
+                currentEditingLogId = id;
+                logModalTitle.textContent = 'Sửa bài học';
+                logTitleInput.value = logToEdit.title;
+                logContentInput.value = logToEdit.content;
+                logModal.style.display = 'flex';
+            }
+        }
+        function deleteLog(id) {
+            if (confirm('Bạn có chắc muốn xoá bài học này không?')) {
+                logs = logs.filter(log => log.id !== id);
+                saveLogs();
+                renderLogs();
+            }
+        }
+
+        createNewLogBtn.addEventListener('click', openLogModalForNew);
+        logModalCloseBtn.addEventListener('click', () => { logModal.style.display = 'none'; });
+        saveLogBtn.addEventListener('click', () => {
+            const title = logTitleInput.value.trim();
+            const content = logContentInput.value.trim();
+            if (!title) { alert('Vui lòng nhập tiêu đề cho bài học!'); return; }
+            if (currentEditingLogId) {
+                const logToUpdate = logs.find(log => log.id === currentEditingLogId);
+                logToUpdate.title = title;
+                logToUpdate.content = content;
+            } else {
+                logs.push({ id: Date.now(), title, content });
+            }
+            saveLogs();
+            renderLogs();
+            logModal.style.display = 'none';
+        });
+        learningLogList.addEventListener('click', (e) => {
+            const editBtn = e.target.closest('.edit-log-btn');
+            if (editBtn) openLogModalForEdit(Number(editBtn.dataset.id));
+            const deleteBtn = e.target.closest('.delete-log-btn');
+            if (deleteBtn) deleteLog(Number(deleteBtn.dataset.id));
+        });
+
+        // --- PHẦN 3: LOGIC CỦA TRÌNH QUẢN LÝ PROMPT ---
+        
+        let editingIndex = -1;
+        const itemsPerPage = 5;
+        let currentPage = 1;
+        let recognition;
+        let isRecording = false;
+        let currentMicTarget = null;
+        
+        const initialPrompts = [
+          { title: "Giải thích khái niệm Toán", content: "Bạn là gia sư siêu đẳng. Hãy giải thích khái niệm [Điền khái niệm, VD: 'phân số'] một cách thật dễ hiểu, sử dụng các ví dụ và ẩn dụ gần gũi với học sinh lớp [Điền lớp, VD: 6].", category: "Toán học" },
+          { title: "Phân tích tác phẩm Văn học", content: "Hãy phân tích hình tượng nhân vật [Tên nhân vật] trong tác phẩm [Tên tác phẩm]. Tập trung vào các chi tiết về ngoại hình, hành động, nội tâm và mối quan hệ với các nhân vật khác.", category: "Ngữ văn" },
+          { title: "Lập dàn ý bài văn Nghị luận", content: "Lập một dàn ý chi tiết cho bài văn nghị luận về vấn đề: [Điền chủ đề, VD: 'Tầm quan trọng của việc đọc sách']. Dàn ý cần có đủ Mở bài, Thân bài (với ít nhất 3 luận điểm), và Kết bài.", category: "Ngữ văn" },
+          { title: "Tóm tắt sự kiện Lịch sử", content: "Tóm tắt sự kiện lịch sử [Tên sự kiện, VD: 'Chiến dịch Điện Biên Phủ'] thành 5 gạch đầu dòng chính, bao gồm: thời gian, bối cảnh, diễn biến chính, kết quả và ý nghĩa.", category: "Lịch sử" },
+          { title: "Giải thích hiện tượng Khoa học", content: "Giải thích hiện tượng [Tên hiện tượng, VD: 'Quang hợp ở thực vật'] bằng ngôn ngữ đơn giản. Tại sao nó lại xảy ra và vai trò của nó đối với sự sống là gì?", category: "Khoa học" },
+          { title: "Học từ vựng Tiếng Anh", content: "Tôi muốn học từ vựng tiếng Anh về chủ đề [Điền chủ đề, VD: 'Du lịch']. Hãy cho tôi 10 từ vựng quan trọng, kèm theo loại từ, phiên âm, định nghĩa và một câu ví dụ cho mỗi từ.", category: "Ngoại ngữ" }
+        ];
+        let prompts = JSON.parse(localStorage.getItem("prompts")) || initialPrompts;
+
+        function setupSpeechRecognition() {
+          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          const statusEl = document.getElementById('voice-status');
+          if (!SpeechRecognition) {
+            if (statusEl) statusEl.textContent = 'Trình duyệt không hỗ trợ nhận diện giọng nói.';
+            ['mic-title', 'mic-content', 'mic-category'].forEach(id => { const btn = document.getElementById(id); if (btn) btn.disabled = true; });
+            return;
+          }
+          recognition = new SpeechRecognition();
+          recognition.lang = 'vi-VN';
+          recognition.continuous = false;
+          recognition.interimResults = false;
+          recognition.onstart = () => { isRecording = true; currentMicTarget.classList.add('recording'); statusEl.textContent = 'Đang ghi âm...'; };
+          recognition.onend = () => { isRecording = false; currentMicTarget.classList.remove('recording'); if (statusEl.textContent === 'Đang ghi âm...') statusEl.textContent = ''; };
+          recognition.onerror = (event) => { isRecording = false; currentMicTarget.classList.remove('recording'); statusEl.textContent = 'Lỗi: ' + event.error; };
+          recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript.trim();
+            const targetInputId = currentMicTarget.id.replace('mic-', '');
+            document.getElementById(targetInputId).value = transcript;
+            statusEl.textContent = `Đã nhập: "${transcript}"`;
+          };
+        }
+        function toggleMic(targetId) { if (!recognition) return; currentMicTarget = document.getElementById(targetId); isRecording ? recognition.stop() : recognition.start(); }
+        function renderPrompts() {
+          localStorage.setItem("prompts", JSON.stringify(prompts));
+          const viewMode = document.getElementById('viewMode').value;
+          const categoryFilterWrap = document.getElementById("categoryFilterWrap");
+          categoryFilterWrap.style.display = viewMode === "grouped" ? "block" : "none";
+          const search = document.getElementById("search").value.toLowerCase();
+          const promptList = document.getElementById("promptList");
+          const filtered = prompts.filter(p => p.title.toLowerCase().includes(search) || p.content.toLowerCase().includes(search));
+          promptList.innerHTML = "";
+          if (viewMode === "all") { renderAllPrompts(filtered); return; }
+          renderGroupedPrompts(filtered);
+        }
+        function createPromptHTML(p, index) {
+            const contentDisplay = p.url ? `<div class="mb-1"><a href="${p.url}" target="_blank" class="text-blue-500 hover:text-blue-700 hover:underline">🔗 ${p.content}</a></div>` : `<div class="text-gray-700 whitespace-pre-wrap">${p.content}</div>`;
+            return `<div class="border p-4 rounded shadow bg-gray-50 mb-3"><div class="mb-2"><strong class="text-gray-900">${p.title}</strong></div>${contentDisplay}<div class="flex flex-wrap gap-2 mt-2"><button onclick="askAI(${index})" class="bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 text-sm rounded">🤖 Sao chép & Hỏi AI</button><button onclick="editPrompt(${index})" class="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 text-sm rounded">✏️ Sửa</button><button onclick="deletePrompt(${index})" class="bg-red-400 hover:bg-red-500 text-white px-2 py-1 text-sm rounded">🗑️ Xoá</button></div></div>`;
+        }
+        function renderAllPrompts(filteredPrompts) { const promptList = document.getElementById("promptList"); filteredPrompts.forEach(p => { const originalIndex = prompts.findIndex(item => item === p); promptList.innerHTML += createPromptHTML(p, originalIndex); }); renderPagination(1); }
+        function renderGroupedPrompts(filteredPrompts) {
+          const promptList = document.getElementById("promptList");
+          const categoryFilter = document.getElementById("categoryFilter");
+          const categories = {};
+          filteredPrompts.forEach(p => { if (!categories[p.category]) categories[p.category] = []; categories[p.category].push(p); });
+          const categoryKeys = Object.keys(categories).sort();
+          const selectedCategory = categoryFilter.value;
+          let filteredCategories = selectedCategory === "all" ? categoryKeys : categoryKeys.filter(cat => cat === selectedCategory);
+          const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
+          const start = (currentPage - 1) * itemsPerPage;
+          const visibleCategories = filteredCategories.slice(start, start + itemsPerPage);
+          promptList.innerHTML = "";
+          visibleCategories.forEach(cat => {
+            let sectionHTML = `<h2 class="text-xl font-semibold text-blue-600 mb-2 border-b pb-1">${cat}</h2>`;
+            categories[cat].forEach(p => { const originalIndex = prompts.findIndex(item => item === p); sectionHTML += createPromptHTML(p, originalIndex); });
+            promptList.innerHTML += `<div>${sectionHTML}</div>`;
+          });
+          const currentFilterValue = categoryFilter.value;
+          categoryFilter.innerHTML = '<option value="all">Tất cả danh mục</option>';
+          Object.keys(categories).sort().forEach(cat => { categoryFilter.innerHTML += `<option value="${cat}">${cat}</option>`; });
+          categoryFilter.value = currentFilterValue;
+          renderPagination(totalPages);
+        }
+        function renderPagination(totalPages) { const pagination = document.getElementById("pagination"); pagination.innerHTML = ""; if (totalPages <= 1) return; for (let i = 1; i <= totalPages; i++) { const btn = document.createElement("button"); btn.innerText = i; btn.className = `px-3 py-1 rounded ${i === currentPage ? 'bg-indigo-500 text-white' : 'bg-gray-200'}`; btn.onclick = () => { currentPage = i; renderPrompts(); }; pagination.appendChild(btn); } }
+        function addPrompt() { const title = document.getElementById("title").value.trim(); let content = document.getElementById("content").value.trim(); const category = document.getElementById("category").value.trim(); if (!title || !content || !category) { alert("Vui lòng nhập đầy đủ tiêu đề, nội dung và danh mục."); return; } let url = (content.startsWith('http://') || content.startsWith('https://')) ? content : null; const promptData = { title, content, category, url }; if (editingIndex >= 0) { prompts[editingIndex] = promptData; editingIndex = -1; } else { prompts.push(promptData); } document.getElementById("title").value = ""; document.getElementById("content").value = ""; document.getElementById("category").value = ""; currentPage = 1; renderPrompts(); }
+        function deletePrompt(index) { if (confirm(`Bạn có chắc muốn xoá prompt "${prompts[index].title}"?`)) { prompts.splice(index, 1); renderPrompts(); } }
+        function editPrompt(index) { const p = prompts[index]; document.getElementById("title").value = p.title; document.getElementById("content").value = p.content; document.getElementById("category").value = p.category; editingIndex = index; document.querySelector('#modal-content-wrapper').scrollTop = 0; }
+        function askAI(index) { const promptContent = prompts[index].content; sendPromptToAI(promptContent); }
+        function exportPrompts() { if(prompts.length === 0) { alert("Không có prompt nào để xuất."); return; } const blob = new Blob([JSON.stringify(prompts, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "my_prompts.json"; a.click(); URL.revokeObjectURL(url); }
+        function importPrompts(event) {
+          const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
+          reader.onload = (e) => {
+            try {
+              const imported = JSON.parse(e.target.result); if (!Array.isArray(imported)) throw new Error("File JSON phải là một mảng.");
+              const validPrompts = imported.filter(p => p.title && p.content && p.category); const existingTitles = new Set(prompts.map(p => p.title));
+              const newPrompts = validPrompts.filter(p => !existingTitles.has(p.title));
+              prompts = prompts.concat(newPrompts); alert(`Đã nhập thành công ${newPrompts.length} prompt mới.`); renderPrompts();
+            } catch (err) { alert("Lỗi đọc file JSON: " + err.message); }
+          };
+          reader.readAsText(file); event.target.value = '';
+        }
+        function deleteCategory() {
+          const catToDelete = document.getElementById("deleteCategoryInput").value.trim(); if (!catToDelete) { alert("Vui lòng nhập tên danh mục cần xoá."); return; }
+          const originalLength = prompts.length; prompts = prompts.filter(p => p.category !== catToDelete); const numDeleted = originalLength - prompts.length;
+          if (numDeleted > 0) { alert(`Đã xoá thành công ${numDeleted} prompt thuộc danh mục "${catToDelete}".`); document.getElementById("deleteCategoryInput").value = ""; renderPrompts(); } else { alert(`Không tìm thấy danh mục nào có tên "${catToDelete}".`); }
+        }
+
+        // --- PHẦN 4: KHỞI CHẠY TOÀN BỘ ỨNG DỤNG ---
+        document.addEventListener('DOMContentLoaded', () => {
+          renderLogs(); // Khởi chạy Sổ tay bài học
+          setupSpeechRecognition(); // Khởi chạy Trình quản lý Prompt
+          ['mic-title', 'mic-content', 'mic-category'].forEach(id => {
+            const btn = document.getElementById(id);
+            if(btn) btn.addEventListener('click', () => toggleMic(id));
+          });
+          renderPrompts();
+        });
+    </script>
+</body>
+</html>
