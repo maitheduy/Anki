@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trung Tâm Luyện Thi & Nâng Cao Điểm Số</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Sections */
+        section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+            font-size: 2.2rem;
+        }
+        
+        /* Benefits */
+        .benefits {
+            background-color: white;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .benefit-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .benefit-card i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Courses */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .course-content {
+            padding: 25px;
+        }
+        
+        .course-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Pricing */
+        .pricing {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            text-align: center;
+        }
+        
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        /* CTA */
+        .cta {
+            text-align: center;
+            background-color: var(--light);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 24px;
+            margin: 0 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Trung Tâm Tinh Hoa</span>
+            </div>
+            <nav>
+                <a href="#benefits" class="btn">Tìm hiểu thêm</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>TUYỂN SINH LUYỆN THI & NÂNG CAO ĐIỂM SỐ</h1>
+            <p>TOÁN - LÝ - HÓA & LẬP TRÌNH (HSG TIN HỌC)</p>
+            <p>Đội ngũ tinh hoa - Lộ trình cá nhân hóa - Dạy cả học sinh mất gốc</p>
+            <a href="#contact" class="btn">Đăng ký ngay</a>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="benefits">
+        <div class="container">
+            <h2 class="section-title">Giải pháp học tập toàn diện</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Lấy lại kiến thức căn bản</h3>
+                    <p>Không còn lo mất gốc, xây dựng nền tảng vững chắc.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Nâng cao điểm số</h3>
+                    <p>Tự tin đạt điểm cao trong các kỳ thi quan trọng.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Thi đỗ trường chuyên</h3>
+                    <p>Vào được trường chuyên, lớp chọn mơ ước.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Phát triển tư duy lập trình</h3>
+                    <p>Bứt phá trong các kỳ thi HSG Tin học, Olympic.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Định hướng nghề nghiệp</h3>
+                    <p>Tư vấn chọn ngành, định hướng tương lai phù hợp.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses">
+        <div class="container">
+            <h2 class="section-title">Chương trình đào tạo</h2>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-content">
+                        <h3>Toán - Lý - Hóa</h3>
+                        <p>Củng cố nền tảng, hỗ trợ học sinh mất gốc. Ôn thi chuyển cấp, luyện thi THPT Quốc gia. Phát triển tư duy giải bài tập khó.</p>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-content">
+                        <h3>Lập trình HSG Tin học</h3>
+                        <p>THCS: Scratch, Python, C++ - luyện thi Tin học trẻ, HSG các cấp. THPT: C++, Python nâng cao, thuật toán chuyên sâu.</p>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-content">
+                        <h3>Định hướng nghề nghiệp</h3>
+                        <p>Phân tích năng lực cá nhân, tư vấn chọn ngành. Xu hướng nghề nghiệp HOT trong kỷ nguyên công nghệ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages Section -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">Ưu điểm vượt trội</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Đội ngũ giảng viên uy tín</h3>
+                    <p>Tiến sĩ Toán học và chuyên gia lập trình giàu kinh nghiệm.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>Lớp học tinh gọn</h3>
+                    <p>8-12 học sinh/lớp, đảm bảo quan tâm sát sao đến từng em.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-road"></i>
+                    <h3>Lộ trình cá nhân hóa</h3>
+                    <p>Đánh giá đầu vào miễn phí, xây dựng lộ trình phù hợp với năng lực.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2 class="section-title">Học phí</h2>
+            <div class="price-tag">2.000.000 VNĐ/tháng</div>
+            <p>2 buổi/tuần - Học thử 1 buổi MIỄN PHÍ</p>
+        </div>
+    </section>
+
+    <!-- Promotion Section -->
+    <section class="promotion">
+        <div class="container">
+            <h2 class="section-title">Ưu đãi đặc biệt</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-percentage"></i>
+                    <h3>Giảm 20% học phí</h3>
+                    <p>Cho 15 học sinh đăng ký sớm nhất.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-gift"></i>
+                    <h3>Tặng bộ tài liệu độc quyền</h3>
+                    <p>Sổ tay công thức, thuật toán và tài liệu ôn thi.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Tư vấn nghề nghiệp 1-1</h3>
+                    <p>Miễn phí buổi định hướng nghề nghiệp cho học sinh THPT.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="cta">
+        <div class="container">
+            <h2 class="section-title">Đăng ký ngay hôm nay để giữ chỗ!</h2>
+            <p>Hotline: <strong>0906 063 826</strong> | <strong>0932 720 343</strong></p>
+            <p>Địa chỉ: <strong>BS10 Vinhomes Grand Park, TP. Thủ Đức, TP.HCM</strong></p>
+            <a href="tel:0906063826" class="btn"><i class="fas fa-phone"></i> Gọi ngay</a>
+            <a href="#" class="btn"><i class="fab fa-facebook-messenger"></i> Nhắn tin Facebook</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Trung Tâm Tinh Hoa</span>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-zalo"></i></a>
+            </div>
+            <p>© 2023 Trung Tâm Luyện Thi & Nâng Cao Điểm Số. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
