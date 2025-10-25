@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GermanKids - Học Tiếng Đức Vui Nhộn</title>
+    <style>
+        :root {
+            --primary: #4A6FA5;
+            --secondary: #FF9F1C;
+            --accent: #E71D36;
+            --light: #F8F9FA;
+            --dark: #2B2D42;
+            --success: #2EC4B6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #4A6FA5, #2B2D42);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--light);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            margin-bottom: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .card-container {
+            perspective: 1000px;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, var(--secondary), #FFBF69);
+            color: var(--dark);
+        }
+        
+        .card-back {
+            background: linear-gradient(135deg, var(--primary), #6A8EBA);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .german-word {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .category {
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .translation {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .example {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        .hint {
+            font-size: 1rem;
+            margin-top: 15px;
+            opacity: 0.7;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .difficulty-controls {
+            display: flex;
+            gap: 10px;
+            flex: 2;
+        }
+        
+        .navigation-controls {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex: 1;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-easy {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-medium {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .btn-hard {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-next {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-flip {
+            background-color: var(--primary);
+            color: white;
+            margin: 0 auto;
+            display: block;
+            width: 200px;
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--success));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        
+        .decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .decoration-1 {
+            top: 10px;
+            left: 20px;
+        }
+        
+        .decoration-2 {
+            bottom: 10px;
+            right: 20px;
+        }
+        
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            padding: 8px 15px;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .card-counter {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--dark);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .german-word {
+                font-size: 2rem;
+            }
+            
+            .translation {
+                font-size: 1.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .difficulty-controls, .navigation-controls {
+                width: 100%;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="decoration decoration-1">🇩🇪</div>
+            <h1>GermanKids</h1>
+            <div class="subtitle">Học tiếng Đức vui nhộn cho trẻ em</div>
+            <div class="decoration decoration-2">📚</div>
+        </header>
+        
+        <div class="category-filter" id="categoryFilter">
+            <!-- Categories will be generated by JavaScript -->
+        </div>
+        
+        <div class="card-container">
+            <div class="card" id="flashcard">
+                <div class="card-face card-front">
+                    <div class="category" id="cardCategory">Câu hỏi chính</div>
+                    <div class="german-word" id="germanWord">Wie heißen Sie?</div>
+                    <div class="hint">(Nhấn để xem nghĩa)</div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="translation" id="translation">Tên của ngài là gì?</div>
+                    <div class="example" id="example">"Wie heißen Sie?" - "Ich heiße Anna."</div>
+                    <div class="hint">(Nhấn để quay lại)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-counter" id="cardCounter">Thẻ 1/50</div>
+        
+        <button class="btn-flip" id="flipBtn">Lật thẻ</button>
+        
+        <div class="controls">
+            <div class="difficulty-controls">
+                <button class="btn-easy" id="easyBtn">Dễ 😊</button>
+                <button class="btn-medium" id="mediumBtn">Trung bình 😐</button>
+                <button class="btn-hard" id="hardBtn">Khó 😓</button>
+            </div>
+            <div class="navigation-controls">
+                <button class="btn-next" id="nextBtn">Tiếp theo →</button>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="learnedCount">0</div>
+                <div class="stat-label">Đã học</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalCount">0</div>
+                <div class="stat-label">Tổng số từ</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="streakCount">0</div>
+                <div class="stat-label">Ngày học liên tiếp</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu từ vựng
+        const vocabulary = [
+            // Các câu hỏi chính (W-Fragen)
+            {
+                german: "Wie heißen Sie?",
+                translation: "Tên của ngài là gì?",
+                category: "Câu hỏi chính",
+                example: '"Wie heißen Sie?" - "Ich heiße Anna."'
+            },
+            {
+                german: "Woher kommen Sie?",
+                translation: "Ngài đến từ đâu?",
+                category: "Câu hỏi chính",
+                example: '"Woher kommen Sie?" - "Ich komme aus Vietnam."'
+            },
+            {
+                german: "Wo wohnen Sie?",
+                translation: "Ngài sống ở đâu?",
+                category: "Câu hỏi chính",
+                example: '"Wo wohnen Sie?" - "Ich wohne in Berlin."'
+            },
+            {
+                german: "Wie heißt du?",
+                translation: "Tên của bạn là gì?",
+                category: "Câu hỏi chính",
+                example: '"Wie heißt du?" - "Ich heiße Minh."'
+            },
+            {
+                german: "Woher kommst du?",
+                translation: "Bạn đến từ đâu?",
+                category: "Câu hỏi chính",
+                example: '"Woher kommst du?" - "Ich komme aus Hanoi."'
+            },
+            {
+                german: "Wo wohnst du?",
+                translation: "Bạn sống ở đâu?",
+                category: "Câu hỏi chính",
+                example: '"Wo wohnst du?" - "Ich wohne in Frankfurt."'
+            },
+            {
+                german: "Wo lernst du Deutsch?",
+                translation: "Bạn học tiếng Đức ở đâu?",
+                category: "Câu hỏi chính",
+                example: '"Wo lernst du Deutsch?" - "Ich lerne Deutsch in der Schule."'
+            },
+            
+            // Các câu trả lời và cụm từ giới thiệu
+            {
+                german: "Ich bin...",
+                translation: "Tôi là...",
+                category: "Giới thiệu",
+                example: '"Ich bin Lehrer." (Tôi là giáo viên.)'
+            },
+            {
+                german: "Ich heiße...",
+                translation: "Tôi tên là...",
+                category: "Giới thiệu",
+                example: '"Ich heiße Nguyen." (Tôi tên là Nguyên.)'
+            },
+            {
+                german: "Mein Name ist...",
+                translation: "Tên của tôi là...",
+                category: "Giới thiệu",
+                example: '"Mein Name ist Linh." (Tên của tôi là Linh.)'
+            },
+            {
+                german: "Ich komme aus...",
+                translation: "Tôi đến từ...",
+                category: "Giới thiệu",
+                example: '"Ich komme aus Vietnam." (Tôi đến từ Việt Nam.)'
+            },
+            {
+                german: "Ich wohne in...",
+                translation: "Tôi sống ở...",
+                category: "Giới thiệu",
+                example: '"Ich wohne in München." (Tôi sống ở Munich.)'
+            },
+            {
+                german: "Das ist...",
+                translation: "Đây là...",
+                category: "Giới thiệu",
+                example: '"Das ist mein Freund." (Đây là bạn của tôi.)'
+            },
+            {
+                german: "Und Sie?",
+                translation: "Còn ngài thì sao?",
+                category: "Giới thiệu",
+                example: '"Ich komme aus Berlin. Und Sie?" (Tôi đến từ Berlin. Còn ngài?)'
+            },
+            {
+                german: "Und du?",
+                translation: "Còn bạn thì sao?",
+                category: "Giới thiệu",
+                example: '"Ich wohne in Hamburg. Und du?" (Tôi sống ở Hamburg. Còn bạn?)'
+            },
+            
+            // Động từ (Verben)
+            {
+                german: "sich vorstellen",
+                translation: "tự giới thiệu",
+                category: "Động từ",
+                example: '"Kannst du dich vorstellen?" (Bạn có thể tự giới thiệu không?)'
+            },
+            {
+                german: "sein",
+                translation: "thì, là, ở",
+                category: "Động từ",
+                example: '"Ich bin Student." (Tôi là sinh viên.)'
+            },
+            {
+                german: "heißen",
+                translation: "tên là, được gọi là",
+                category: "Động từ",
+                example: '"Wie heißt du?" (Bạn tên là gì?)'
+            },
+            {
+                german: "kommen",
+                translation: "đến",
+                category: "Động từ",
+                example: '"Ich komme aus Vietnam." (Tôi đến từ Việt Nam.)'
+            },
+            {
+                german: "wohnen",
+                translation: "sống, cư ngụ",
+                category: "Động từ",
+                example: '"Wo wohnst du?" (Bạn sống ở đâu?)'
+            },
+            {
+                german: "lernen",
+                translation: "học",
+                category: "Động từ",
+                example: '"Ich lerne Deutsch." (Tôi học tiếng Đức.)'
+            },
+            {
+                german: "sagen",
+                translation: "nói, bảo",
+                category: "Động từ",
+                example: '"Was sagst du?" (Bạn nói gì vậy?)'
+            },
+            
+            // Danh từ (Nomen)
+            {
+                german: "der Deutschkurs",
+                translation: "lớp học tiếng Đức",
+                category: "Danh từ",
+                example: '"Ich besuche einen Deutschkurs." (Tôi tham gia một lớp học tiếng Đức.)'
+            },
+            {
+                german: "die Deutschlehrerin",
+                translation: "cô giáo tiếng Đức",
+                category: "Danh từ",
+                example: '"Meine Deutschlehrerin kommt aus Deutschland." (Cô giáo tiếng Đức của tôi đến từ Đức.)'
+            },
+            
+            // Trạng từ & Các từ khác
+            {
+                german: "jetzt",
+                translation: "bây giờ, hiện tại",
+                category: "Trạng từ",
+                example: '"Jetzt lerne ich Deutsch." (Bây giờ tôi đang học tiếng Đức.)'
+            },
+            {
+                german: "auch",
+                translation: "cũng, cũng vậy",
+                category: "Trạng từ",
+                example: '"Ich komme aus Vietnam. Und du?" - "Ich auch!" (Tôi đến từ Việt Nam. Còn bạn? - Tôi cũng vậy!)'
+            },
+            {
+                german: "hier",
+                translation: "ở đây",
+                category: "Trạng từ",
+                example: '"Ich wohne hier." (Tôi sống ở đây.)'
+            },
+            {
+                german: "mal",
+                translation: "nào, xem nào (từ đệm)",
+                category: "Trạng từ",
+                example: '"Sag mal, wie heißt du?" (Này, bạn tên là gì?)'
+            },
+            
+            // Tên quốc gia (Länder)
+            {
+                german: "Deutschland",
+                translation: "Nước Đức",
+                category: "Quốc gia",
+                example: '"Ich komme aus Deutschland." (Tôi đến từ nước Đức.)'
+            },
+            {
+                german: "Vietnam",
+                translation: "Nước Việt Nam",
+                category: "Quốc gia",
+                example: '"Meine Familie kommt aus Vietnam." (Gia đình tôi đến từ Việt Nam.)'
+            },
+            {
+                german: "die Türkei",
+                translation: "Nước Thổ Nhĩ Kỳ",
+                category: "Quốc gia",
+                example: '"Er kommt aus der Türkei." (Anh ấy đến từ Thổ Nhĩ Kỳ.)'
+            },
+            {
+                german: "Russland",
+                translation: "Nước Nga",
+                category: "Quốc gia",
+                example: '"Sie wohnt in Russland." (Cô ấy sống ở Nga.)'
+            },
+            {
+                german: "Brasilien",
+                translation: "Nước Brazil",
+                category: "Quốc gia",
+                example: '"Wir besuchen Brasilien." (Chúng tôi thăm Brazil.)'
+            },
+            
+            // Cụm từ giao tiếp thông dụng
+            {
+                german: "Guten Tag!",
+                translation: "Chào (trang trọng)",
+                category: "Giao tiếp",
+                example: '"Guten Tag! Wie geht es Ihnen?" (Xin chào! Ông/bà có khỏe không?)'
+            },
+            {
+                german: "Hallo!",
+                translation: "Chào (thân mật)",
+                category: "Giao tiếp",
+                example: '"Hallo! Wie geht\'s?" (Chào! Bạn khỏe không?)'
+            },
+            {
+                german: "Sag mal...",
+                translation: "Này... / Nói xem nào...",
+                category: "Giao tiếp",
+                example: '"Sag mal, woher kommst du?" (Này, bạn đến từ đâu?)'
+            },
+            {
+                german: "Cool!",
+                translation: "Tuyệt!",
+                category: "Giao tiếp",
+                example: '"Du sprichst gut Deutsch!" - "Cool!" (Bạn nói tiếng Đức giỏi quá! - Tuyệt!)'
+            },
+            {
+                german: "Ja, super!",
+                translation: "Vâng, tuyệt vời!",
+                category: "Giao tiếp",
+                example: '"Wir gehen heute ins Kino." - "Ja, super!" (Hôm nay chúng ta đi xem phim. - Vâng, tuyệt vời!)'
+            },
+            {
+                german: "Gesundheit!",
+                translation: "Chúc sức khỏe!",
+                category: "Giao tiếp",
+                example: '*After someone sneezes* "Gesundheit!"'
+            },
+            {
+                german: "Guten Appetit!",
+                translation: "Chúc ngon miệng!",
+                category: "Giao tiếp",
+                example: '"Das Essen ist fertig. Guten Appetit!" (Thức ăn đã sẵn sàng. Chúc ngon miệng!)'
+            },
+            {
+                german: "Danke, gleichfalls!",
+                translation: "Cảm ơn, bạn cũng vậy nhé!",
+                category: "Giao tiếp",
+                example: '"Guten Appetit!" - "Danke, gleichfalls!" (Chúc ngon miệng! - Cảm ơn, bạn cũng vậy nhé!)'
+            }
+        ];
+
+        // Lấy tất cả các category duy nhất
+        const categories = [...new Set(vocabulary.map(item => item.category))];
+        
+        // Khởi tạo ứng dụng
+        let currentCardIndex = 0;
+        let learnedCards = new Set();
+        let currentCategory = "Tất cả";
+        let currentCardIds = []; // Mảng chứa các ID thẻ hiện tại theo category
+        
+        // DOM Elements
+        const flashcard = document.getElementById('flashcard');
+        const germanWord = document.getElementById('germanWord');
+        const cardCategory = document.getElementById('cardCategory');
+        const translation = document.getElementById('translation');
+        const example = document.getElementById('example');
+        const flipBtn = document.getElementById('flipBtn');
+        const easyBtn = document.getElementById('easyBtn');
+        const mediumBtn = document.getElementById('mediumBtn');
+        const hardBtn = document.getElementById('hardBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressBar = document.getElementById('progressBar');
+        const learnedCount = document.getElementById('learnedCount');
+        const totalCount = document.getElementById('totalCount');
+        const streakCount = document.getElementById('streakCount');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const cardCounter = document.getElementById('cardCounter');
+        
+        // Khởi tạo bộ lọc category
+        function initCategoryFilter() {
+            // Thêm nút "Tất cả"
+            const allButton = document.createElement('div');
+            allButton.className = 'category-btn active';
+            allButton.textContent = 'Tất cả';
+            allButton.addEventListener('click', () => filterByCategory('Tất cả'));
+            categoryFilter.appendChild(allButton);
+            
+            // Thêm các nút category
+            categories.forEach(category => {
+                const button = document.createElement('div');
+                button.className = 'category-btn';
+                button.textContent = category;
+                button.addEventListener('click', () => filterByCategory(category));
+                categoryFilter.appendChild(button);
+            });
+        }
+        
+        // Lọc theo category
+        function filterByCategory(category) {
+            currentCategory = category;
+            
+            // Cập nhật trạng thái active của nút
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === category) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Tạo danh sách ID thẻ theo category
+            currentCardIds = [];
+            vocabulary.forEach((item, index) => {
+                if (currentCategory === "Tất cả" || item.category === currentCategory) {
+                    currentCardIds.push(index);
+                }
+            });
+            
+            // Hiển thị thẻ đầu tiên của category được chọn
+            currentCardIndex = 0;
+            showCard();
+            updateStats();
+        }
+        
+        // Hiển thị thẻ hiện tại
+        function showCard() {
+            if (currentCardIds.length === 0) return;
+            
+            const cardId = currentCardIds[currentCardIndex];
+            const card = vocabulary[cardId];
+            
+            germanWord.textContent = card.german;
+            cardCategory.textContent = card.category;
+            translation.textContent = card.translation;
+            example.textContent = card.example;
+            
+            // Đảm bảo thẻ hiển thị mặt trước
+            flashcard.classList.remove('flipped');
+            
+            // Cập nhật bộ đếm thẻ
+            cardCounter.textContent = `Thẻ ${currentCardIndex + 1}/${currentCardIds.length}`;
+            
+            updateStats();
+        }
+        
+        // Chuyển đến thẻ tiếp theo
+        function nextCard() {
+            if (currentCardIds.length === 0) return;
+            
+            currentCardIndex = (currentCardIndex + 1) % currentCardIds.length;
+            showCard();
+        }
+        
+        // Cập nhật thống kê
+        function updateStats() {
+            let filteredVocabulary = vocabulary;
+            
+            if (currentCategory !== "Tất cả") {
+                filteredVocabulary = vocabulary.filter(item => item.category === currentCategory);
+            }
+            
+            const total = filteredVocabulary.length;
+            const learned = Array.from(learnedCards).filter(index => {
+                const card = vocabulary[index];
+                return currentCategory === "Tất cả" || card.category === currentCategory;
+            }).length;
+            
+            totalCount.textContent = total;
+            learnedCount.textContent = learned;
+            
+            // Cập nhật thanh tiến trình
+            const progress = total > 0 ? (learned / total) * 100 : 0;
+            progressBar.style.width = `${progress}%`;
+            
+            // Cập nhật streak (giả lập)
+            streakCount.textContent = Math.floor(Math.random() * 10) + 1;
+        }
+        
+        // Xử lý sự kiện
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+        
+        flipBtn.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+        
+        easyBtn.addEventListener('click', () => {
+            const cardId = currentCardIds[currentCardIndex];
+            learnedCards.add(cardId);
+            updateStats();
+        });
+        
+        mediumBtn.addEventListener('click', () => {
+            // Với mức độ trung bình, thêm vào danh sách đã học với xác suất 50%
+            if (Math.random() > 0.5) {
+                const cardId = currentCardIds[currentCardIndex];
+                learnedCards.add(cardId);
+            }
+            updateStats();
+        });
+        
+        hardBtn.addEventListener('click', () => {
+            // Với mức độ khó, không thêm vào danh sách đã học
+            updateStats();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            nextCard();
+        });
+        
+        // Khởi tạo ứng dụng
+        function initApp() {
+            initCategoryFilter();
+            filterByCategory("Tất cả"); // Bắt đầu với tất cả các thẻ
+        }
+        
+        // Bắt đầu ứng dụng
+        initApp();
+    </script>
+</body>
+</html>
